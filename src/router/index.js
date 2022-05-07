@@ -46,7 +46,7 @@ const routes = [
     name: "ForgotPassword",
     component: ForgotPassword,
     meta: {
-      title: 'ForgotPassword'
+      title: 'Forgot Password'
     }
   },
 ];
