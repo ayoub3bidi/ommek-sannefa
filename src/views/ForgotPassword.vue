@@ -1,6 +1,6 @@
 <template>
   <div class="reset-password">
-    <Modal v-if="modalActive" :modalMessage="modalMessage" @close-modal="closeModal" />
+    <Modal v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal" />
     <Loading v-if="loading" />
     <div class="form-wrap">
       <form class="reset">
@@ -28,6 +28,8 @@
 import email from "../assets/Icons/envelope-regular.svg";
 import Modal from "../components/Modal";
 import Loading from "../components/Loading";
+import firebase from "firebase/app";
+import "firebase/auth";
 export default {
   name: "ForgotPassword",
   data() {
@@ -46,9 +48,19 @@ export default {
   methods: {
     resetPassword() {
       this.loading = true;
+      firebase
+        .auth()
+        .sendPasswordResetEmail(this.email)
+        .then(() => {
           this.modalMessage = "If your account exists, you will receive a email";
           this.loading = false;
           this.modalActive = true;
+        })
+        .catch((err) => {
+          this.modalMessage = err.message;
+          this.loading = false;
+          this.modalActive = true;
+        });
     },
     closeModal() {
       this.modalActive = !this.modalActive;
