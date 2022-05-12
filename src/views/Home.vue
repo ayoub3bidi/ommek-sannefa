@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <recipePost :post="welcomeScreen"/>
+    <recipePost v-if="!user" :post="welcomeScreen"/>
     <recipePost :post="post" v-for="(post, index) in sampleRecipePost" :key="index"/>
     <div class="card-wrap">
       <div class="container">
@@ -55,7 +55,10 @@ export default {
   computed: {
     sampleRecipeCards() {
       return this.$store.state.sampleRecipeCards
-    }
+    },
+    user() {
+      return this.$store.state.user
+    },
   }
 };
 </script>

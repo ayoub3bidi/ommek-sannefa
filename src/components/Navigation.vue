@@ -9,9 +9,9 @@
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
           <router-link class="link" to="#">Create Recipe</router-link>
-          <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
+          <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login/Register</router-link>
         </ul>
-        <div :class="{ 'mobile-user-menu': mobile }" @click="toggleProfileMenu" class="profile" ref="profile">
+        <div v-if="user" :class="{ 'mobile-user-menu': mobile }" @click="toggleProfileMenu" class="profile" ref="profile">
           <span>{{ this.$store.state.profileInitials }}</span>
           <div v-show="profileMenu" class="profile-menu">
             <div class="info">
@@ -50,7 +50,7 @@
         <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
         <router-link class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
         <router-link class="link" to="#">Create Recipe</router-link>
-        <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
+        <router-link v-if="user" class="link" :to="{ name: 'Login' }">Login/Register</router-link>
       </ul>
     </transition>
   </header>
@@ -111,7 +111,11 @@ export default {
       window.location.reload();
     },
   },
-  computed: {},
+  computed: {
+    user() {
+      return this.$store.state.user
+    },
+  },
 };
 </script>
 
