@@ -1,5 +1,5 @@
 <template>
-  <div class="modal">
+  <div class="modal" @click.self="closeModal">
     <div class="modal-content">
       <p>{{ this.modalMessage }}</p>
       <button @click="closeModal">Close</button>
@@ -26,7 +26,7 @@ export default {
   z-index: 101;
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 121%;
   top: 0;
   background-color: rgba(0, 0, 0, 0.7);
 
