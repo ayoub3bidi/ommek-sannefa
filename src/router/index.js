@@ -6,7 +6,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue"; 
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ProfileView from "../views/ProfileView.vue";
-import AdminView from "../views/AdminView.vue";
+// import AdminView from "../views/AdminView.vue";
 
 Vue.use(VueRouter);
 
@@ -59,14 +59,14 @@ const routes = [
       title: 'Profile'
     }
   },
-  {
-    path: "/admin",
-    name: "Admin",
-    component: AdminView,
-    meta: {
-      title: 'Admin'
-    }
-  },
+  // {
+  //   path: "/admin",
+  //   name: "Admin",
+  //   component: AdminView,
+  //   meta: {
+  //     title: 'Admin'
+  //   }
+  // },
 ];
 
 const router = new VueRouter({
