@@ -7,8 +7,8 @@
       <div class="nav-links">
         <ul v-show="!mobile">
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
-          <router-link class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
-          <router-link class="link" to="#">Create Recipe</router-link>
+          <router-link v-if="user" class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
+          <router-link v-if="user" class="link" to="#">Create Recipe</router-link>
           <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login/Register</router-link>
         </ul>
         <div v-if="user" :class="{ 'mobile-user-menu': mobile }" @click="toggleProfileMenu" class="profile" ref="profile">
@@ -42,9 +42,9 @@
     <transition name="mobile-nav">
       <ul class="mobile-nav" v-show="mobileNav">
         <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
-        <router-link class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
-        <router-link class="link" to="#">Create Recipe</router-link>
-        <router-link v-if="user" class="link" :to="{ name: 'Login' }">Login/Register</router-link>
+        <router-link v-if="user" class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
+        <router-link v-if="user" class="link" to="#">Create Recipe</router-link>
+        <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login/Register</router-link>
       </ul>
     </transition>
   </header>
