@@ -7,6 +7,7 @@ import Register from "../views/Register.vue";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ProfileView from "../views/ProfileView.vue";
 // import AdminView from "../views/AdminView.vue";
+import CreateRecipe from "../views/CreateRecipe.vue";
 
 Vue.use(VueRouter);
 
@@ -57,6 +58,14 @@ const routes = [
     component: ProfileView,
     meta: {
       title: 'Profile'
+    }
+  },
+  {
+    path: "/create-recipe",
+    name: "CreateRecipe",
+    component: CreateRecipe,
+    meta: {
+      title: 'Create Recipe'
     }
   },
   // {
