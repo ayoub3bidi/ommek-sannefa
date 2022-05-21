@@ -29,6 +29,18 @@ export default new Vuex.Store({
     profileInitials: null,
   },
   mutations: {
+    newRecipePost(state, payload) {
+      state.recipeHTML = payload
+    },
+    updateRecipeTitle(state, payload) {
+      state.recipeTitle = payload
+    },
+    fileNameChange(state, payload) {
+      state.recipePhotoName = payload
+    },
+    createFileURL(state, payload) {
+      state.recipePhotoFileURL = payload
+    },
     toggleEditPost(state, payload) {
       state.editPost = payload
     },

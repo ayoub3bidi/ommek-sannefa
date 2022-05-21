@@ -8,7 +8,7 @@
                 <input type="text" placeholder="Enter Recipe title" v-model="recipeTitle">
                 <div class="upload-file">
                     <label for="recipe-photo">Upload Cover Photo</label>
-                    <input type="file" ref="recipPhoto" id="recipe-photo" accept=".png, .jpg, .jpeg">
+                    <input type="file" ref="recipPhoto" id="recipe-photo" @change="fileChange" accept=".png, .jpg, .jpeg">
                     <button class="preview" :class="{'button-inactive': !this.$store.state.recipePhotoFileURL}">Preview Photo</button>
                     <span>File Chosen: {{ this.$store.state.recipePhotoName }}</span>
                 </div>
@@ -30,20 +30,54 @@ window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
 Quill.register("modules/imageResize", ImageResize);
 export default {
-    name: "CreateRecipe",
-    data() {
-        return {
-            error: null,
-            errorMsg: null,
-            editorSettings: {
-                modules: {
-                    imageResize: {}
-                }
-            }
-        }
+  name: "CreateRecipe",
+  data() {
+    return {
+      file: null,
+      error: null,
+      errorMsg: null,
+      loading: null,
+      editorSettings: {
+        modules: {
+          imageResize: {},
+        },
+      },
+    };
+  },
+  components: {},
+  methods: {
+    fileChange() {
+      this.file = this.$refs.recipePhoto.files[0]
+      const fileName = this.file.name
+      this.$store.commit("fileNameChange", fileName)
+      this.$store.commit("createFileURL", URL.createObjectURL(this.file))
     }
-
-}
+  },
+  computed: {
+    profileId() {
+      return this.$store.state.profileId;
+    },
+    recipeCoverPhotoName() {
+      return this.$store.state.recipePhotoName;
+    },
+    recipeTitle: {
+      get() {
+        return this.$store.state.recipeTitle;
+      },
+      set(payload) {
+        this.$store.commit("updateRecipeTitle", payload);
+      },
+    },
+    recipeHTML: {
+      get() {
+        return this.$store.state.recipeHTML;
+      },
+      set(payload) {
+        this.$store.commit("newRecipePost", payload);
+      },
+    },
+  },
+};
 </script>
 
 <style lang="scss">
