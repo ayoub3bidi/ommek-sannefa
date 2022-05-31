@@ -1,30 +1,39 @@
 <template>
-    <div class="create-post">
-        <div class="container">
-            <div :class="{invisible: !error}" class="err-message">
-                <p><span>Error:</span>{{ this.errorMsg }}</p>
-            </div>
-            <div class="info">
-                <input type="text" placeholder="Enter Recipe title" v-model="recipeTitle">
-                <div class="upload-file">
-                    <label for="recipe-photo">Upload Cover Photo</label>
-                    <input type="file" ref="recipPhoto" id="recipe-photo" @change="fileChange" accept=".png, .jpg, .jpeg">
-                    <button class="preview" :class="{'button-inactive': !this.$store.state.recipePhotoFileURL}">Preview Photo</button>
-                    <span>File Chosen: {{ this.$store.state.recipePhotoName }}</span>
-                </div>
-            </div>
-            <div class="editor">
-                <vue-editor :editorOptions="editorSettings" v-model="recipeHTML" useCustomImageHandler />
-            </div>
-            <div class="actions">
-                <button>Publish</button>
-                <router-link class="router-button" to="#">Post Preview</router-link>
-            </div>
+  <div class="create-post">
+    <RecipeCoverPreview v-show="this.$store.state.recipePhotoPreview" />
+    <Loading v-show="loading" />
+    <div class="container">
+      <div :class="{ invisible: !error }" class="err-message">
+        <p><span>Error:</span>{{ this.errorMsg }}</p>
+      </div>
+      <div class="info">
+        <input type="text" placeholder="Enter Recipe Title" v-model="recipeTitle" />
+        <div class="upload-file">
+          <label for="recipe-photo">Upload Cover Photo</label>
+          <input type="file" ref="recipePhoto" id="recipe-photo" @change="fileChange" accept=".png, .jpg, ,jpeg" />
+          <button @click="openPreview" class="preview" :class="{ 'button-inactive': !this.$store.state.recipePhotoFileURL }">
+            Preview Photo
+          </button>
+          <span>File Chosen: {{ this.$store.state.recipePhotoName }}</span>
         </div>
+      </div>
+      <div class="editor">
+        <vue-editor :editorOptions="editorSettings" v-model="recipeHTML" useCustomImageHandler @image-added="imageHandler" />
+      </div>
+      <div class="actions">
+        <button @click="uploadRecipe">Publish recipe</button>
+        <router-link class="router-button" :to="{ name: 'RecipePreview' }">Recipe Preview</router-link>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
+import RecipeCoverPreview from "../components/RecipeCoverPreview";
+import Loading from "../components/Loading";
+import firebase from "firebase/app";
+import "firebase/storage";
+import db from "../firebase/firebaseInit";
 import Quill from "quill";
 window.Quill = Quill;
 const ImageResize = require("quill-image-resize-module").default;
@@ -44,14 +53,91 @@ export default {
       },
     };
   },
-  components: {},
+  components: {
+    RecipeCoverPreview,
+    Loading,
+  },
   methods: {
     fileChange() {
-      this.file = this.$refs.recipePhoto.files[0]
-      const fileName = this.file.name
-      this.$store.commit("fileNameChange", fileName)
-      this.$store.commit("createFileURL", URL.createObjectURL(this.file))
-    }
+      this.file = this.$refs.recipePhoto.files[0];
+      const fileName = this.file.name;
+      this.$store.commit("fileNameChange", fileName);
+      this.$store.commit("createFileURL", URL.createObjectURL(this.file));
+    },
+
+    openPreview() {
+      this.$store.commit("openPhotoPreview");
+    },
+
+    imageHandler(file, Editor, cursorLocation, resetUploader) {
+      const storageRef = firebase.storage().ref();
+      const docRef = storageRef.child(`documents/recipePostPhotos/${file.name}`);
+      docRef.put(file).on(
+        "state_changed",
+        (snapshot) => {
+          console.log(snapshot);
+        },
+        (err) => {
+          console.log(err);
+        },
+        async () => {
+          const downloadURL = await docRef.getDownloadURL();
+          Editor.insertEmbed(cursorLocation, "image", downloadURL);
+          resetUploader();
+        }
+      );
+    },
+
+    uploadRecipe() {
+      if (this.recipeTitle.length !== 0 && this.recipeHTML.length !== 0) {
+        if (this.file) {
+          this.loading = true;
+          const storageRef = firebase.storage().ref();
+          const docRef = storageRef.child(`documents/RecipeCoverPhotos/${this.$store.state.recipePhotoName}`);
+          docRef.put(this.file).on(
+            "state_changed",
+            (snapshot) => {
+              console.log(snapshot);
+            },
+            (err) => {
+              console.log(err);
+              this.loading = false;
+            },
+            async () => {
+              const downloadURL = await docRef.getDownloadURL();
+              const timestamp = await Date.now();
+              const dataBase = await db.collection("recipePosts").doc();
+
+              await dataBase.set({
+                recipeID: dataBase.id,
+                recipeHTML: this.recipeHTML,
+                recipeCoverPhoto: downloadURL,
+                recipeCoverPhotoName: this.recipeCoverPhotoName,
+                recipeTitle: this.recipeTitle,
+                profileId: this.profileId,
+                date: timestamp,
+              });
+              await this.$store.dispatch("getPost");
+              this.loading = false;
+              this.$router.push({ name: "ViewRecipe", params: { recipeid: dataBase.id } });
+            }
+          );
+          return;
+        }
+        this.error = true;
+        this.errorMsg = "Please ensure you uploaded a cover photo!";
+        setTimeout(() => {
+          this.error = false;
+        }, 5000);
+        return;
+      }
+      this.error = true;
+      this.errorMsg = "Please ensure Recipe Title & Recipe Post has been filled!";
+      setTimeout(() => {
+        this.error = false;
+      }, 5000);
+      return;
+    },
   },
   computed: {
     profileId() {

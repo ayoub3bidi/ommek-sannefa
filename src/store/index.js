@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 import firebase from "firebase/app";
 import "firebase/auth";
 import db from "../firebase/firebaseInit";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -13,6 +13,8 @@ export default new Vuex.Store({
       { recipeTitle: "Ma9roudh", cover: "https://sp-ao.shortpixel.ai/client/q_lqip,ret_wait/https://howto-cook.net/wp-content/uploads/2020/05/makroudh-recipe-for-beginners-780x517.png", date: "March 24, 2022"  },
       { recipeTitle: "Debla", cover: "https://upload.wikimedia.org/wikipedia/commons/2/24/Oreilles_de_juge.jpg", date: "March 25, 2022"  },
     ],
+    recipePosts: [],
+    postLoaded: null,
     recipeHTML: "Write your recipe title here...",
     recipeTitle: "",
     recipePhotoName: "",
@@ -28,24 +30,48 @@ export default new Vuex.Store({
     profileId: null,
     profileInitials: null,
   },
+  getters: {
+    recipePostsFeed(state) {
+      return state.recipePosts.slice(0, 2);
+    },
+    recipePostsCards(state) {
+      return state.recipePosts.slice(2, 6);
+    },
+  },
   mutations: {
     newRecipePost(state, payload) {
-      state.recipeHTML = payload
+      state.recipeHTML = payload;
     },
     updateRecipeTitle(state, payload) {
-      state.recipeTitle = payload
+      state.recipeTitle = payload;
     },
     fileNameChange(state, payload) {
-      state.recipePhotoName = payload
+      state.recipePhotoName = payload;
     },
     createFileURL(state, payload) {
-      state.recipePhotoFileURL = payload
+      state.recipePhotoFileURL = payload;
+    },
+    openPhotoPreview(state) {
+      state.recipePhotoPreview = !state.recipePhotoPreview;
     },
     toggleEditPost(state, payload) {
-      state.editPost = payload
+      state.editPost = payload;
+    },
+    setRecipeState(state, payload) {
+      state.recipeTitle = payload.recipeTitle;
+      state.recipeHTML = payload.recipeHTML;
+      state.recipePhotoFileURL = payload.recipeCoverPhoto;
+      state.recipePhotoName = payload.recipeCoverPhotoName;
+    },
+    filterrecipePost(state, payload) {
+      state.recipePosts = state.recipePosts.filter((post) => post.recipeID !== payload);
     },
     updateUser(state, payload) {
-      state.user = payload
+      state.user = payload;
+    },
+    setProfileAdmin(state, payload) {
+      state.profileAdmin = payload;
+      console.log(state.profileAdmin);
     },
     setProfileInfo(state, doc) {
       state.profileId = doc.id;
@@ -77,6 +103,33 @@ export default new Vuex.Store({
       commit("setProfileInitials")
       console.log(dbResults)
     },
+    async getPost({ state }) {
+      const dataBase = await db.collection("recipePosts").orderBy("date", "desc");
+      const dbResults = await dataBase.get();
+      dbResults.forEach((doc) => {
+        if (!state.recipePosts.some((post) => post.recipeID === doc.id)) {
+          const data = {
+            recipeID: doc.data().recipeID,
+            recipeHTML: doc.data().recipeHTML,
+            recipeCoverPhoto: doc.data().recipeCoverPhoto,
+            recipeTitle: doc.data().recipeTitle,
+            recipeDate: doc.data().date,
+            recipeCoverPhotoName: doc.data().recipeCoverPhotoName,
+          };
+          state.recipePosts.push(data);
+        }
+      });
+      state.postLoaded = true;
+    },
+    async updatePost({ commit, dispatch }, payload) {
+      commit("filterrecipePost", payload);
+      await dispatch("getPost");
+    },
+    async deletePost({ commit }, payload) {
+      const getPost = await db.collection("recipePosts").doc(payload);
+      await getPost.delete();
+      commit("filterRecipePost", payload);
+    },
     async updateUserSettings({ commit, state }) {
       const dataBase = await db.collection("users").doc(state.profileId);
       await dataBase.update({
@@ -87,6 +140,5 @@ export default new Vuex.Store({
       commit("setProfileInitials");
     },
   },
-  modules: {
-  }
-})
+  modules: {},
+});
