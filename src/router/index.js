@@ -9,6 +9,7 @@ import ProfileView from "../views/ProfileView.vue";
 // import AdminView from "../views/AdminView.vue";
 import CreateRecipe from "../views/CreateRecipe.vue";
 import RecipePreview from "../views/RecipePreview.vue";
+import ViewRecipe from "../views/ViewRecipe.vue";
 
 Vue.use(VueRouter);
 
@@ -74,7 +75,15 @@ const routes = [
     name:"RecipePreview",
     component:RecipePreview,
     meta:{
-      title:"Create Recipie",
+      title:"Create Recipe",
+    },
+  },
+  {
+    path:"/view-recipe",
+    name:"ViewRecipe",
+    component:ViewRecipe,
+    meta:{
+      title:"View Recipe",
   },
   }
   // {
