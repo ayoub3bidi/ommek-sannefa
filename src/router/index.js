@@ -8,6 +8,7 @@ import ForgotPassword from "../views/ForgotPassword.vue";
 import ProfileView from "../views/ProfileView.vue";
 // import AdminView from "../views/AdminView.vue";
 import CreateRecipe from "../views/CreateRecipe.vue";
+import RecipePreview from "../views/RecipePreview.vue";
 
 Vue.use(VueRouter);
 
@@ -68,6 +69,14 @@ const routes = [
       title: 'Create Recipe'
     }
   },
+  {
+    path:"/recipe-preview",
+    name:"RecipePreview",
+    component:RecipePreview,
+    meta:{
+      title:"Create Recipie",
+  },
+  }
   // {
   //   path: "/admin",
   //   name: "Admin",
