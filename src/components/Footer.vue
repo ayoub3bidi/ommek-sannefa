@@ -24,7 +24,7 @@
             <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
             <router-link v-if="user" class="link" :to="{ name: 'Recipes' }">Recipes</router-link>
             <router-link v-if="user" class="link" :to="{ name: 'CreateRecipe' }">Create Recipe</router-link>
-            <router-link v-if="!user" class="link" to="#">Login In / Register</router-link>
+            <router-link v-if="!user" class="link" :to="{ name: 'Login'}">Login In / Register</router-link>
           </ul>
         </div>
       </div>
@@ -41,7 +41,7 @@ import twitter from "../assets/Icons/twitter-brands.svg";
 import instagram from "../assets/Icons/instagram-brands.svg";
 import linkedin from "../assets/Icons/linkedin-brands.svg";
 export default {
-  name: "footer",
+  name: "foot",
   components: {
     youTube,
     twitter,
