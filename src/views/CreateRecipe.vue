@@ -71,7 +71,7 @@ export default {
 
     imageHandler(file, Editor, cursorLocation, resetUploader) {
       const storageRef = firebase.storage().ref();
-      const docRef = storageRef.child(`documents/recipePostPhotos/${file.name}`);
+      const docRef = storageRef.child(`documents/Photos/${file.name}`);
       docRef.put(file).on(
         "state_changed",
         (snapshot) => {
@@ -93,7 +93,7 @@ export default {
         if (this.file) {
           this.loading = true;
           const storageRef = firebase.storage().ref();
-          const docRef = storageRef.child(`documents/RecipeCoverPhotos/${this.$store.state.recipePhotoName}`);
+          const docRef = storageRef.child(`documents/Covers/${this.$store.state.recipePhotoName}`);
           docRef.put(this.file).on(
             "state_changed",
             (snapshot) => {
