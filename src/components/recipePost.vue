@@ -6,17 +6,17 @@
         <h2 v-else>{{ post.recipeTitle }}</h2>
         <p v-if="post.welcomeScreen">{{ post.recipePost }}</p>
         <p class="content-preview" v-else v-html="post.recipeHTML"></p>
-        <router-link class="link link-light" v-if="post.welcomeScreen" to="#">
+        <router-link class="link link-light" v-if="post.welcomeScreen" :to="{ name: 'Login' }">
           Login/Register<Arrow class="arrow arrow-light" />
         </router-link>
-        <router-link class="link" v-else to="#">
+        <router-link class="link" v-else :to="{ name: 'ViewRecipe', params: { recipeid: this.post.recipeID } }">
           View The Post<Arrow class="arrow" />
         </router-link>
       </div>
     </div>
     <div class="recipe-photo">
       <img v-if="post.welcomeScreen" src="../assets/DTLQFVSX0AAJFZy.jpg"/>
-      <img v-else :src="post.cover"/>
+      <img v-else :src="post.recipeCoverPhoto"/>
     </div>
   </div>
 </template>
@@ -31,9 +31,9 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.user
-    }
-  }
+      return this.$store.state.user;
+    },
+  },
 };
 </script>
 

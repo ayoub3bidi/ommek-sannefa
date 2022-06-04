@@ -2,10 +2,10 @@
   <div class="card-wrap">
     <div class="cards container">
       <div class="toggle-edit">
-        <span>Toggle Editing Post</span>
+        <span>Toggle Editing Recipes</span>
         <input type="checkbox" v-model="editPost" />
       </div>
-      <recipeCard :post="post" v-for="(post, index) in sampleRecipeCards" :key="index" />
+      <recipeCard :post="post" v-for="(post, index) in recipePostsCards" :key="index" />
     </div>
   </div>
 </template>
@@ -16,8 +16,8 @@ export default {
   name: "recipes",
   components: { recipeCard },
   computed: {
-    sampleRecipeCards() {
-      return this.$store.state.sampleRecipeCards;
+    recipePostsCards() {
+      return this.$store.getters.recipePostsCards.filter(x => x.profileId === this.$store.state.profileId);
     },
     editPost: {
       get() {

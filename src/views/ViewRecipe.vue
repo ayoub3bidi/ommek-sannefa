@@ -2,7 +2,7 @@
   <div class="post-view" v-if="currentRecipe">
     <div class="container quillWrapper">
       <h2>{{ this.currentRecipe[0].recipeTitle }}</h2>
-      <h4>Posted on: {{ new Date(this.currentRecipe[0].recipeDate).toLocaleString("en-us", { dateStyle: "long" }) }}</h4>
+      <h4>Posted on: {{ new Date(this.currentRecipe[0].recipeDate).toLocaleString("en-us", { dateStyle: "long" }) }} by {{ this.$store.state.profileUsername }}</h4>
       <img :src="this.currentRecipe[0].recipeCoverPhoto" alt="" />
       <div class="post-content ql-editor" v-html="this.currentRecipe[0].recipeHTML"></div>
     </div>

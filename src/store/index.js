@@ -8,10 +8,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    sampleRecipeCards: [
-      { recipeTitle: "Ma9roudh", cover: "https://sp-ao.shortpixel.ai/client/q_lqip,ret_wait/https://howto-cook.net/wp-content/uploads/2020/05/makroudh-recipe-for-beginners-780x517.png", date: "March 24, 2022"  },
-      { recipeTitle: "Debla", cover: "https://upload.wikimedia.org/wikipedia/commons/2/24/Oreilles_de_juge.jpg", date: "March 25, 2022"  },
-    ],
     recipePosts: [],
     postLoaded: null,
     recipeHTML: "Write your recipe title here...",
@@ -110,6 +106,7 @@ export default new Vuex.Store({
             recipeTitle: doc.data().recipeTitle,
             recipeDate: doc.data().date,
             recipeCoverPhotoName: doc.data().recipeCoverPhotoName,
+            profileId: doc.data().profileId,
           };
           state.recipePosts.push(data);
         }

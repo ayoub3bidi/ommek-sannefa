@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <recipePost v-if="!user" :post="welcomeScreen"/>
-    <recipePost :post="post" v-for="(post, index) in sampleRecipePost" :key="index"/>
+    <recipePost :post="post" v-for="(post, index) in recipePostsFeed" :key="index"/>
     <div class="card-wrap">
       <div class="container">
         <h3>View More Recent Posts</h3>
         <div class="cards">
-          <recipeCard :post="post" v-for="(post, index) in sampleRecipeCards" :key="index"/>
+          <recipeCard :post="post" v-for="(post, index) in recipePostsCards" :key="index"/>
         </div>
       </div>
     </div>
@@ -38,23 +38,14 @@ export default {
         welcomeScreen: true,
         photo: "candy",
       },
-      sampleRecipePost: [
-        {
-          recipeTitle: "test1",
-          recipeHTML: "qsdmfkmqsdl",
-          cover: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
-        },
-        {
-          recipeTitle: "test2",
-          recipeHTML: "qsdmfkmqsdl",
-          cover: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8ZGVza3RvcCUyMGNvbXB1dGVyfGVufDB8fDB8fA%3D%3D&w=1000&q=80"
-        },
-      ],
     };
   },
   computed: {
-    sampleRecipeCards() {
-      return this.$store.state.sampleRecipeCards
+    recipePostsFeed() {
+      return this.$store.getters.recipePostsFeed;
+    },
+    recipePostsCards() {
+      return this.$store.getters.recipePostsCards;
     },
     user() {
       return this.$store.state.user

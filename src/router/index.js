@@ -79,7 +79,7 @@ const routes = [
     },
   },
   {
-    path:"/view-recipe",
+    path:"/view-recipe/:recipeid",
     name:"ViewRecipe",
     component:ViewRecipe,
     meta:{

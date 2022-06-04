@@ -8,13 +8,13 @@
         <Delete class="delete" />
       </div>
     </div>
-    <img :src="post.cover"/>
+    <img :src="post.recipeCoverPhoto"/>
     <div class="info">
       <h4>{{ post.recipeTitle }}</h4>
-      <h6>Posted on: {{ new Date(post.date).toLocaleString("en-us", { dateStyle: "long" }) }}</h6>
-      <router-link class="link" to="#">
-        View The Post <Arrow class="arrow" />
-      </router-link>
+      <h6>Posted on: {{ new Date(post.recipeDate).toLocaleString("en-us", { dateStyle: "long" }) }} by <b>{{ this.$store.state.profileUsername }}</b></h6>
+      <router-link class="link" :to="{ name: 'ViewRecipe', params: { recipeid: this.post.recipeID } }">
+          View The Post<Arrow class="arrow" />
+        </router-link>
     </div>
   </div>
 </template>
