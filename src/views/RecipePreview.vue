@@ -1,5 +1,8 @@
 <template>
   <div class="post-view">
+    <div style="padding-left: 15px">
+      <button @click="$router.go(-1)">← Go Back</button>
+    </div>
     <div class="container quillWrapper">
       <h2>{{ this.recipeTitle }}</h2>
       <img :src="recipeCoverPhoto" alt="" />

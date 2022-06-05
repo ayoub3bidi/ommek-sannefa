@@ -34,7 +34,7 @@ export default {
       welcomeScreen: {
         title: "Welcome!",
         recipePost:
-          "New recipe every friday. Register today to never miss a post!",
+          "New recipe everyday. Register today to never miss a post!",
         welcomeScreen: true,
         photo: "candy",
       },
