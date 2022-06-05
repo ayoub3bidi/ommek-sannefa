@@ -2,7 +2,8 @@
   <header>
     <nav class="container">
       <div class="branding">
-        <router-link class="header" :to="{ name: 'Home' }">Ommek sannefa</router-link>
+        <router-link class="header" :to="{ name: 'Home' }">
+          Ommek<img src="../assets/chef.png">Sannefa</router-link>
       </div>
       <div class="nav-links">
         <ul v-show="!mobile">
@@ -295,5 +296,9 @@ header {
   .mobile-nav-leave-to {
     transform: translateX(-250px);
   }
+}
+img {
+  height: 50px;
+  width: auto;
 }
 </style>
