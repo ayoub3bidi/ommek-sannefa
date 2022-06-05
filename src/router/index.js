@@ -11,6 +11,8 @@ import CreateRecipe from "../views/CreateRecipe.vue";
 import RecipePreview from "../views/RecipePreview.vue";
 import ViewRecipe from "../views/ViewRecipe.vue";
 import EditRecipe from "../views/EditRecipe.vue";
+import firebase from "firebase/app"
+import "firebase/auth"
 
 Vue.use(VueRouter);
 
@@ -20,7 +22,8 @@ const routes = [
     name: "Home",
     component: Home,
     meta: {
-      title: 'Home'
+      title: 'Home',
+      requiresAuth: false
     }
   },
   {
@@ -28,7 +31,8 @@ const routes = [
     name: "Recipes",
     component: Recipes,
     meta: {
-      title: 'Recipes'
+      title: 'Recipes',
+      requiresAuth: true
     }
   },
   {
@@ -36,7 +40,8 @@ const routes = [
     name: "Login",
     component: Login,
     meta: {
-      title: 'Login'
+      title: 'Login',
+      requiresAuth: false
     }
   },
   {
@@ -44,7 +49,8 @@ const routes = [
     name: "Register",
     component: Register,
     meta: {
-      title: 'Register'
+      title: 'Register',
+      requiresAuth: false
     }
   },
   {
@@ -52,7 +58,8 @@ const routes = [
     name: "ForgotPassword",
     component: ForgotPassword,
     meta: {
-      title: 'Forgot Password'
+      title: 'Forgot Password',
+      requiresAuth: false
     }
   },
   {
@@ -60,7 +67,8 @@ const routes = [
     name: "Profile",
     component: ProfileView,
     meta: {
-      title: 'Profile'
+      title: 'Profile',
+      requiresAuth: true
     }
   },
   {
@@ -68,7 +76,8 @@ const routes = [
     name: "CreateRecipe",
     component: CreateRecipe,
     meta: {
-      title: 'Create Recipe'
+      title: 'Create Recipe',
+      requiresAuth: true
     }
   },
   {
@@ -76,7 +85,8 @@ const routes = [
     name:"RecipePreview",
     component:RecipePreview,
     meta:{
-      title:"Create Recipe",
+      title:"Recipe Preview",
+      requiresAuth: true
     },
   },
   {
@@ -85,6 +95,7 @@ const routes = [
     component:ViewRecipe,
     meta:{
       title:"View Recipe",
+      requiresAuth: false
     },
   },
   {
@@ -93,6 +104,7 @@ const routes = [
     component:EditRecipe,
     meta:{
       title:"Edit Recipe",
+      requiresAuth: true
   },
   }
   // {
@@ -114,6 +126,20 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Ommek Sannefa`
   next()
+})
+
+router.beforeEach(async (to, from, next) => {
+  let user = firebase.auth().currentUser
+  if (to.matched.some((res) => res.meta.requiresAuth)) {
+    if (user) {
+      if (to.matched.some((res) => res.meta.requiresAdmin)) {
+        return next({ name: "Home" });
+      }
+      return next();
+    }
+    return next({ name: "Home" });
+  }
+  return next()
 })
 
 export default router;
