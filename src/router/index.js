@@ -10,6 +10,7 @@ import ProfileView from "../views/ProfileView.vue";
 import CreateRecipe from "../views/CreateRecipe.vue";
 import RecipePreview from "../views/RecipePreview.vue";
 import ViewRecipe from "../views/ViewRecipe.vue";
+import EditRecipe from "../views/EditRecipe.vue";
 
 Vue.use(VueRouter);
 
@@ -84,6 +85,14 @@ const routes = [
     component:ViewRecipe,
     meta:{
       title:"View Recipe",
+    },
+  },
+  {
+    path:"/edit-recipe/:recipeid",
+    name:"EditRecipe",
+    component:EditRecipe,
+    meta:{
+      title:"Edit Recipe",
   },
   }
   // {

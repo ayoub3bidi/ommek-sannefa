@@ -1,10 +1,10 @@
 <template>
   <div class="card">
     <div v-show="editPost" class="icons">
-      <div class="icon">
+      <div @click="editRecipe" class="icon">
         <Edit class="edit" />
       </div>
-      <div class="icon">
+      <div @click="deleteRecipe"  class="icon">
         <Delete class="delete" />
       </div>
     </div>
@@ -31,7 +31,15 @@ export default {
     Edit,
     Delete,
   },
-  methods: {},
+  methods: {
+     deleteRecipe() {
+      console.log("deleting")
+      this.$store.dispatch("deleteRecipe", this.post.recipeID);
+    },
+    editRecipe() {
+      this.$router.push({ name: "EditRecipe", params: { recipeid: this.post.recipeID } });
+    },
+  },
   computed: {
     editPost() {
       return this.$store.state.editPost;

@@ -58,7 +58,7 @@ export default new Vuex.Store({
       state.recipePhotoFileURL = payload.recipeCoverPhoto;
       state.recipePhotoName = payload.recipeCoverPhotoName;
     },
-    filterrecipePost(state, payload) {
+    filterRecipePost(state, payload) {
       state.recipePosts = state.recipePosts.filter((post) => post.recipeID !== payload);
     },
     updateUser(state, payload) {
@@ -114,10 +114,10 @@ export default new Vuex.Store({
       state.postLoaded = true;
     },
     async updatePost({ commit, dispatch }, payload) {
-      commit("filterrecipePost", payload);
+      commit("filterRecipePost", payload);
       await dispatch("getPost");
     },
-    async deletePost({ commit }, payload) {
+    async deleteRecipe({ commit }, payload) {
       const getPost = await db.collection("recipePosts").doc(payload);
       await getPost.delete();
       commit("filterRecipePost", payload);

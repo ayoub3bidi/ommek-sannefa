@@ -5,7 +5,7 @@
         <span>Toggle Editing Recipes</span>
         <input type="checkbox" v-model="editPost" />
       </div>
-      <recipeCard :post="post" v-for="(post, index) in recipePostsCards" :key="index" />
+      <recipeCard :post="post" v-for="(post, index) in recipePosts" :key="index" />
     </div>
   </div>
 </template>
@@ -16,8 +16,8 @@ export default {
   name: "recipes",
   components: { recipeCard },
   computed: {
-    recipePostsCards() {
-      return this.$store.getters.recipePostsCards.filter(x => x.profileId === this.$store.state.profileId);
+    recipePosts() {
+      return this.$store.state.recipePosts.filter(x => x.profileId === this.$store.state.profileId);
     },
     editPost: {
       get() {
